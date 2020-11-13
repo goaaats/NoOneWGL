@@ -325,17 +325,16 @@ function play(volume) {
   setTimeout(function () { soundFile.play(); }, 1);
 }
 
-let playStarted = false;
-
 let soundFile = undefined;
 
-function handleAudioStartPlay() {
+function loadAudioMuted() {
   if (soundFile == undefined || !soundFile.currentTime) {
     console.log("trying to load audio...");
 
     //Create the audio tag
     soundFile = document.createElement("audio");
     soundFile.preload = "auto";
+    soundFile.muted = true;
     soundFile.loop = true;
 
     //Load the sound file (using a source element for expandability)
@@ -347,20 +346,23 @@ function handleAudioStartPlay() {
     //Load the audio tag
     //It auto plays as a fallback
     soundFile.load();
-    soundFile.volume = 0.000000;
+    soundFile.volume = 0.2;
     soundFile.play();
-
-    play(0.2);
-    playStarted = true;
   }
 }
+
+loadAudioMuted();
 
 function hideInfo() {
   document.getElementById('info').style = 'visibility: hidden;';
 }
 
-document.body.addEventListener("click", () => {
-  handleAudioStartPlay();
+renderer.domElement.addEventListener("click", () => {
+  if (soundFile.muted) {
+    soundFile.muted = false;
+    soundFile.currentTime = 0;
+  }
+
   hideInfo();
 });
 
