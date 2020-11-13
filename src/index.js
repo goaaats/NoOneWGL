@@ -347,7 +347,6 @@ function loadAudioMuted() {
     //It auto plays as a fallback
     soundFile.load();
     soundFile.volume = 0.2;
-    soundFile.play();
   }
 }
 
@@ -358,10 +357,13 @@ function hideInfo() {
 }
 
 renderer.domElement.addEventListener("click", () => {
-  if (soundFile.muted) {
-    soundFile.muted = false;
-    soundFile.currentTime = 0;
-  }
+  setTimeout(() => {
+    if (soundFile.muted || !soundFile.currentTime) {
+      soundFile.muted = false;
+      soundFile.currentTime = 0;
+      soundFile.play();
+    }
+  }, 500);
 
   hideInfo();
 });
